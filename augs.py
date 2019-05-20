@@ -4,11 +4,9 @@ import os
 import cv2
 import skimage
 import random
-from skimage import data_dir, io, filters, img_as_float, exposure
+from skimage import io, filters, img_as_float, exposure
 from skimage.morphology import disk
 import skimage.filters.rank as sfr
-from PIL import Image, ImageEnhance
-import xml.dom.minidom
 
 import utils
 
