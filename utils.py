@@ -166,3 +166,30 @@ def copy_img(img, src, dest):
     for index, tmp_coord in enumerate(src):
         img[dest[1]:dest[3], dest[0]:dest[2]] = img[src[1]:src[3], src[0]:src[2]]
         # img[dest[index][1]][dest[index][0]] = img[tmp_coord[1]][tmp_coord[0]]
+
+def mat_product(matrix, points):
+    result_list = []
+    for tmp_coord in points:
+        tmp_point = np.dot(matrix, np.array(tmp_coord + [1]))
+        result_list.append(tmp_point)
+
+    return result_list
+
+def mat_minus(min_collections, points):
+    result_list = []
+    for tmp_coord in points:
+        tmp_point = [tmp_coord[0] - min_collections[0], tmp_coord[1] - min_collections[1]]
+        result_list.append(tmp_point)
+
+    return result_list
+
+def flip(w, h, horizon, points):
+    result_list = []
+    for tmp_coord in points:
+        if horizon:
+            tmp_point = [w - tmp_coord[0], tmp_coord[1]]
+        else:
+            tmp_point = [tmp_coord[0], h - tmp_coord[1]]
+        result_list.append(tmp_point)
+
+    return result_list
