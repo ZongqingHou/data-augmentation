@@ -211,3 +211,9 @@ def flip(w, h, horizon, points):
 		result_list.append(tmp_point)
 
 	return result_list
+
+def augmentation(start_index, module, function_name, img, points, box, thread_module):	
+	img, points, box = getattr(da, function_name)(img, points, box)
+	utils.save(start_index, img, ano_points, ano_box, thread_module.dest_img_path_root, thread_module.dest_json_path_root, thread_module.dest_xml_path_root)
+	start_index += 1
+	return start_index, img, points, box

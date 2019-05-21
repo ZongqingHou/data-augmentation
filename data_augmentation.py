@@ -36,22 +36,20 @@ class DataAugThread(threading.Thread):
 				img_more, points_more, box_more = da.add_target(copy.deepcopy(img),
 										 						copy.deepcopy(ano_points),
 										 						copy.deepcopy(ano_box))
-
+				
 				img, ano_points, ano_box = getattr(da, tmp_func)(img, ano_points, ano_box)
 				utils.save(start_index, img, ano_points, ano_box, self.dest_img_path_root, self.dest_json_path_root, self.dest_xml_path_root)
-
 				start_index += 1
-				img_more, points_more, box_more = getattr(da, tmp_func)(img_more, points_more, box_more)
-				
-				utils.save(start_index, img, ano_points, ano_box, self.dest_img_path_root, self.dest_json_path_root, self.dest_xml_path_root)
 
+				img_more, points_more, box_more = getattr(da, tmp_func)(img_more, points_more, box_more)
+				utils.save(start_index, img, ano_points, ano_box, self.dest_img_path_root, self.dest_json_path_root, self.dest_xml_path_root)
 				start_index += 1
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description='DataAug')
-	parser.add_argument('--img_source_path', type=str, default='./img')
-	parser.add_argument('--json_source_path', type=str, default='./test')
-	parser.add_argument('--ano_source_path', type=str, default='./test')
+	parser.add_argument('--img_source_path', type=str, default='./test/img')
+	parser.add_argument('--json_source_path', type=str, default='./test/json')
+	parser.add_argument('--ano_source_path', type=str, default='./test/xml')
 	parser.add_argument('--img_dest_path', type=str, default='./dest/img')
 	parser.add_argument('--json_dest_path', type=str, default='./dest/json')
 	parser.add_argument('--ano_dest_path', type=str, default='./dest/xml')
