@@ -2,8 +2,8 @@ import cv2
 import os
 
 def show_pic(img, bboxes=None):
-    cv2.imwrite('./1.jpg', img)
-    img = cv2.imread('./1.jpg')
+    # cv2.imwrite('./1.jpg', img)
+    # img = cv2.imread('./1.jpg')
     for i in range(len(bboxes)):
         bbox = bboxes[i]
         x_min = bbox[0]
@@ -19,10 +19,10 @@ def show_pic(img, bboxes=None):
         cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-    from xml_helper import *
+    from utils import *
 
-    source_pic_root_path = '/home/hdd/Git/darknet/backup/bullet/new_aug/images'
-    source_xml_root_path = '/home/hdd/Git/darknet/backup/bullet/new_aug/ano'
+    source_pic_root_path = './dest/img'
+    source_xml_root_path = './dest/xml'
 
     for parent, _, files in os.walk(source_pic_root_path):
         for file in files:
