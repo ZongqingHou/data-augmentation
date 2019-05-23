@@ -4,9 +4,12 @@ import json
 import glob
 import numpy as np
 import base64
+import random
 import os
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as DOC
+
+offset_flag = [True, False]
 
 def save(index, img, ano_points, ano_box, dest_img_path_root, dest_json_path_root, dest_xml_path_root, debug=''):
 	cv2.imwrite(dest_img_path_root + debug + '%s.jpg' %index, img)
@@ -172,6 +175,15 @@ def max_min(points):
 		y_collections.append(tmp_coord[1])
 
 	return [min(x_collections), min(y_collections), max(x_collections), max(y_collections)]
+
+def random_offerset(max_min_coords, img_width, img_height):
+	width_flag = random.choice(offset_flag)
+	height_flag = random.choice(offset_flag)
+
+	width_offset = random.randint(1, img_width - max_min_coords[-2]) if width_flag else -random.randint(1, max_min_coords[0])
+	height_offset = random.randint(1, img_height - max_min_coords[-1]) if height_flag else -random.randint(1, max_min_coords[1])
+
+	return width_offset, height_offset
 
 def point_offset(points, offset):
 	for tmp_coord in points:

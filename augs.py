@@ -25,8 +25,7 @@ class DataAugmentation:
 			if tmp_ano["label"] == "bullet":
 				tmp_max_min = utils.max_min(tmp_ano["points"])
 
-				width_offset = random.randint(0, img_width - tmp_max_min[-2])
-				height_offset = random.randint(0, img_height - tmp_max_min[-1])
+				width_offset, height_offset = utils.random_offerset(tmp_max_min, img_width, img_height)
 
 				points = copy.deepcopy(tmp_ano["points"])
 				points = utils.point_offset(points, [width_offset, height_offset])

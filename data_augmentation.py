@@ -42,19 +42,19 @@ class DataAugThread(threading.Thread):
 				start_index += 1
 
 				img_more, points_more, box_more = getattr(da, tmp_func)(img_more, points_more, box_more)
-				utils.save(start_index, img, ano_points, ano_box, self.dest_img_path_root, self.dest_json_path_root, self.dest_xml_path_root)
+				utils.save(start_index, img_more, points_more, box_more, self.dest_img_path_root, self.dest_json_path_root, self.dest_xml_path_root)
 				start_index += 1
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description='DataAug')
-	parser.add_argument('--img_source_path', type=str, default='./test/img')
-	parser.add_argument('--json_source_path', type=str, default='./test/json')
-	parser.add_argument('--ano_source_path', type=str, default='./test/xml')
-	parser.add_argument('--img_dest_path', type=str, default='./dest/img')
-	parser.add_argument('--json_dest_path', type=str, default='./dest/json')
-	parser.add_argument('--ano_dest_path', type=str, default='./dest/xml')
+	parser.add_argument('--img_source_path', type=str, default='/home/hdd/hdD_Git/FCOS/datasets/bullet/src/images')
+	parser.add_argument('--json_source_path', type=str, default='/home/hdd/hdD_Git/FCOS/datasets/bullet/src/json')
+	parser.add_argument('--ano_source_path', type=str, default='/home/hdd/hdD_Git/FCOS/datasets/bullet/src/xml')
+	parser.add_argument('--img_dest_path', type=str, default='/home/hdd/hdD_Git/FCOS/datasets/bullet/dest/images')
+	parser.add_argument('--json_dest_path', type=str, default='/home/hdd/hdD_Git/FCOS/datasets/bullet/dest/json')
+	parser.add_argument('--ano_dest_path', type=str, default='/home/hdd/hdD_Git/FCOS/datasets/bullet/dest/xml')
 	parser.add_argument('--start_name', type=int, default=0)
-	parser.add_argument('--workers', type=int, default=2)
+	parser.add_argument('--workers', type=int, default=4)
 	args = parser.parse_args()
 
 	source_pic_root_path = args.img_source_path
