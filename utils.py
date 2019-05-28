@@ -229,3 +229,37 @@ def augmentation(start_index, module, function_name, img, points, box, thread_mo
 	utils.save(start_index, img, ano_points, ano_box, thread_module.dest_img_path_root, thread_module.dest_json_path_root, thread_module.dest_xml_path_root)
 	start_index += 1
 	return start_index, img, points, box
+
+if __name__ == "__main__":
+	import io
+	from PIL import Image
+	dest = "/home/extension/datasets/bullect_collection/backup/pairs/"
+	json_root = "/home/hdd/hdD_Git/FCOS/datasets/bullet/dest/json/*.json"
+	json_files = glob.glob(json_root)
+
+	index_name = 0
+
+	for tmp_json in json_files:
+		with open(tmp_json, 'r') as file_buffer:
+			load_dict = json.load(file_buffer)
+
+		image_buffer = io.BytesIO(base64.b64decode(load_dict["imageData"]))
+		image = Image.open(image_buffer)
+
+		xml_ano = []
+
+		for tmp_coord in load_dict["shapes"]:
+			if tmp_coord["label"] == "boundary" or tmp_coord["label"] == "target":
+				continue
+
+			bbox = max_min(tmp_coord["points"])
+			bbox.append(tmp_coord["label"])
+			xml_ano.append(bbox)
+		
+		image.save(dest + "images/%s.jpg" %index_name)
+
+		img_size = [image.size[1], image.size[0], 3]
+
+		generate_xml(str(index_name), xml_ano, img_size, dest + "ano/%s.xml" %index_name)
+
+		index_name += 1
