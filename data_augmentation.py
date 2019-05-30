@@ -10,6 +10,14 @@ import utils
 
 function_list = [tmp for tmp in dir(da) if '__' not in tmp]
 
+function_list_Luminance = ["changeLight", "darkness"]
+function_list_Rotation = ["rotate_img_bbox", "filp_pic_bboxes", "shift_pic_bboxes", "crop_img_bboxes"]
+function_list_Noise = ["addNoise", "gaussian_noise", "salt_noise", "pepper_noise", "salt_pepper_noise", "poisson_noise"]
+function_list_Filter = ["gaussian_filter", "median_filter", "mean_filter", "bilater_filter"]
+function_list_Others = ["enh_gamma", "hist_unif"]
+
+function_list = [function_list_Luminance, function_list_Rotation, function_list_Noise, function_list_Filter, function_list_Others]
+
 class DataAugThread(threading.Thread):
 	def __init__(self, img_list, src_json_path_root, src_xml_path_root, dest_img_path_root, dest_json_path_root, dest_xml_path_root):
 		super(DataAugThread, self).__init__()
@@ -26,9 +34,6 @@ class DataAugThread(threading.Thread):
 
 		for tmp_img in self.img_list:
 			for tmp_func in function_list:
-				if tmp_func == "add_target":
-					continue
-
 				img = cv2.imread(tmp_img)
 				ano_points = utils.load_json(self.src_json_path_root + utils.name(tmp_img) + '.json')
 				ano_box = utils.parse_xml(self.src_xml_path_root + utils.name(tmp_img) + '.xml')
@@ -44,6 +49,26 @@ class DataAugThread(threading.Thread):
 				img_more, points_more, box_more = getattr(da, tmp_func)(img_more, points_more, box_more)
 				utils.save(start_index, img_more, points_more, box_more, self.dest_img_path_root, self.dest_json_path_root, self.dest_xml_path_root)
 				start_index += 1
+
+				for tmp_sub_func in tmp_func:
+
+				# img = cv2.imread(tmp_img)
+				# ano_points = utils.load_json(self.src_json_path_root + utils.name(tmp_img) + '.json')
+				# ano_box = utils.parse_xml(self.src_xml_path_root + utils.name(tmp_img) + '.xml')
+
+				# img_more, points_more, box_more = da.add_target(copy.deepcopy(img),
+				# 						 						copy.deepcopy(ano_points),
+				# 						 						copy.deepcopy(ano_box))
+				
+
+
+				# img, ano_points, ano_box = getattr(da, tmp_func)(img, ano_points, ano_box)
+				# utils.save(start_index, img, ano_points, ano_box, self.dest_img_path_root, self.dest_json_path_root, self.dest_xml_path_root)
+				# start_index += 1
+
+				# img_more, points_more, box_more = getattr(da, tmp_func)(img_more, points_more, box_more)
+				# utils.save(start_index, img_more, points_more, box_more, self.dest_img_path_root, self.dest_json_path_root, self.dest_xml_path_root)
+				# start_index += 1
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description='DataAug')
