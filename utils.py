@@ -11,6 +11,13 @@ import xml.dom.minidom as DOC
 
 offset_flag = [True, False]
 
+def intersection(default_index, list_collections):
+	if default_index == len(list_collections) - 1:
+		return list_collections[0:default_index]
+	else:
+		return list_collections[0:default_index] + list_collections[default_index+1:]
+
+
 def save(index, img, ano_points, ano_box, dest_img_path_root, dest_json_path_root, dest_xml_path_root, debug=''):
 	cv2.imwrite(dest_img_path_root + debug + '%s.jpg' %index, img)
 	with open(dest_img_path_root + debug + '%s.jpg' %index, 'rb') as buffer:
@@ -233,8 +240,8 @@ def augmentation(start_index, module, function_name, img, points, box, thread_mo
 if __name__ == "__main__":
 	import io
 	from PIL import Image
-	dest = "/home/extension/datasets/bullect_collection/backup/pairs/"
-	json_root = "/home/hdd/hdD_Git/FCOS/datasets/bullet/dest/json/*.json"
+	dest = "/home/hdd/git/data-augmentation/test_data/dest/pairs/"
+	json_root = "/home/hdd/git/data-augmentation/test_data/src/json/*.json"
 	json_files = glob.glob(json_root)
 
 	index_name = 0
