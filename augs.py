@@ -11,38 +11,6 @@ import labelme
 import utils
 
 class DataAugmentation:
-	def add_target(img, ano_points, ano_box):
-		# point chain list
-		polygon = ano_points["shapes"]
-		img_width = ano_points["imageWidth"]
-		img_height = ano_points["imageHeight"]
-
-		base_information = {"fill_color": None, "shape_type": "polygon", "label": "bullet", "line_color": None}
-
-		tmp_points = []
-
-		for tmp_ano in polygon:
-			if tmp_ano["label"] == "bullet":
-				tmp_max_min = utils.max_min(tmp_ano["points"])
-
-				width_offset, height_offset = utils.random_offerset(tmp_max_min, img_width, img_height)
-
-				points = copy.deepcopy(tmp_ano["points"])
-				points = utils.point_offset(points, [width_offset, height_offset])
-				tmp_xml = utils.max_min(points) + ["bullet"]
-
-				base_information["points"] = points
-				tmp_points.append(copy.deepcopy(base_information))
-				ano_box.append(tmp_xml)
-
-				utils.copy_img(img, tmp_max_min, tmp_xml)
-			else:
-				pass
-
-		polygon += tmp_points
-
-		return img, ano_points, ano_box
-
 	def addNoise(img, point_chain, bboxes):
 		'''
 		输入:

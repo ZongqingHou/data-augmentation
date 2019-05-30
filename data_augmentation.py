@@ -26,24 +26,10 @@ class DataAugThread(threading.Thread):
 
 		for tmp_img in self.img_list:
 			for tmp_func in function_list:
-				if tmp_func == "add_target":
-					continue
-
-				img = cv2.imread(tmp_img)
-				ano_points = utils.load_json(self.src_json_path_root + utils.name(tmp_img) + '.json')
-				ano_box = utils.parse_xml(self.src_xml_path_root + utils.name(tmp_img) + '.xml')
-
-				img_more, points_more, box_more = da.add_target(copy.deepcopy(img),
-										 						copy.deepcopy(ano_points),
-										 						copy.deepcopy(ano_box))
-				
 				img, ano_points, ano_box = getattr(da, tmp_func)(img, ano_points, ano_box)
 				utils.save(start_index, img, ano_points, ano_box, self.dest_img_path_root, self.dest_json_path_root, self.dest_xml_path_root)
 				start_index += 1
 
-				img_more, points_more, box_more = getattr(da, tmp_func)(img_more, points_more, box_more)
-				utils.save(start_index, img_more, points_more, box_more, self.dest_img_path_root, self.dest_json_path_root, self.dest_xml_path_root)
-				start_index += 1
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description='DataAug')
