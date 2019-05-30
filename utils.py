@@ -237,6 +237,22 @@ def augmentation(start_index, module, function_name, img, points, box, thread_mo
 	start_index += 1
 	return start_index, img, points, box
 
+def show_pic(img, bboxes=None):
+    for i in range(len(bboxes)):
+        bbox = bboxes[i]
+        x_min = bbox[0]
+        y_min = bbox[1]
+        x_max = bbox[2]
+        y_max = bbox[3]
+        cv2.rectangle(img,(int(x_min),int(y_min)),(int(x_max),int(y_max)),(0,255,0),3) 
+		
+    cv2.namedWindow('pic', 0)  # 1表示原图
+    cv2.moveWindow('pic', 0, 0)
+    cv2.resizeWindow('pic', 1200,800)  # 可视化的图片大小
+    cv2.imshow('pic', img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows() 
+
 if __name__ == "__main__":
 	import io
 	from PIL import Image
