@@ -35,13 +35,13 @@ if __name__ == "__main__":
 		img_list = []
 
 		for tmp_img in img_list:
-		img = cv2.imread(tmp_img)
-		ano_points = utils.load_json(src_json_path_root + utils.name(tmp_img) + '.json')
-		ano_box = utils.parse_xml(src_xml_path_root + utils.name(tmp_img) + '.xml')
-		img_more, points_more, box_more = add_target(copy.deepcopy(img),
-										 				 copy.deepcopy(ano_points),
-										 			 copy.deepcopy(ano_box))
-				
-				img_more, points_more, box_more = getattr(da, tmp_func)(img_more, points_more, box_more)
-		utils.save(start_index, img_more, points_more, box_more, dest_img_path_root, dest_json_path_root, dest_xml_path_root)
-		start_index += 1
+			img = cv2.imread(tmp_img)
+			ano_points = utils.load_json(src_json_path_root + utils.name(tmp_img) + '.json')
+			ano_box = utils.parse_xml(src_xml_path_root + utils.name(tmp_img) + '.xml')
+			img_more, points_more, box_more = add_target(copy.deepcopy(img),
+														 copy.deepcopy(ano_points),
+														 copy.deepcopy(ano_box))
+					
+			img_more, points_more, box_more = add_target(img_more, points_more, box_more)
+			utils.save(start_index, img_more, points_more, box_more, dest_img_path_root, dest_json_path_root, dest_xml_path_root)
+			start_index += 1
