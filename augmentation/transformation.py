@@ -4,27 +4,31 @@ import numpy as np
 
 class Perspect:
 	def perspect(img, json_file, xml_file):
-		label = xml_file[-1]
-
 		polygon = json_file["shapes"]
-		img_width = json_file["imageWidth"]
-		img_height = json_file["imageHeight"]
-		base_information = {"fill_color": None, "shape_type": "polygon", "label": label, "line_color": None}
+		width = json_file["imageWidth"]
+		height = json_file["imageHeight"]
 
-		tmp_points = []
+		width_offset = random.randint(int(1 / 36 * width), int(1 / 16 * width))
+		height_offset = random.randint(int(1 / 36 * width), int(1 / 16 * height))
+
+		src_point = [[0, height], [width, height], [width_offset, 0], [width - width_offset, 0]]
+		dest_point = [[0, height + height_offset], [width, height + height_offset], [0, 0], [width, 0]]
+		matrix = Perspect.matrix(src_point, dest_point)
+
+		trans_img = Perspect.transform_img(img, matrix, (width, height + height_offset))
+
 		for tmp_ano in polygon:
-			tmp_max_min = utils.max_min(tmp_ano["points"])
-			width_offset, height_offset = utils.random_offerset(tmp_max_min, img_width, img_height)
-			points = copy.deepcopy(tmp_ano["points"])
-			points = utils.point_offset(points, [width_offset, height_offset])
-			tmp_xml = utils.max_min(points) + ["bullet"]
-			base_information["points"] = points
-			tmp_points.append(copy.deepcopy(base_information))
-			ano_box.append(tmp_xml)
-			utils.copy_img(img, tmp_max_min, tmp_xml)
+			tmp_ano["points"] = Perspect.json_parse_points(matrix, tmp_ano["points"])
 
-		polygon += tmp_points
-		return img, ano_points, ano_box
+		bbox = Perspect.xml_parse_points(matrix, xml_file)
+			
+		return trans_img, json_file, bbox
+
+	def json_parse_points(matrix, points):
+		return [Perspect.transform_coord(tmp_point, matrix) for tmp_point in points]
+
+	def xml_parse_points(matrix, bbox):
+		return [Perspect.transform_coord(tmp[:2], matrix) + Perspect.transform_coord(tmp[2:-1], matrix) + [tmp[-1]] for tmp in bbox]
 
 	def matrix(src_coord, dest_coord):
 		prspct_org = np.float32(src_coord)
@@ -41,7 +45,7 @@ class Perspect:
 		src_point = np.array(point + [1])
 		tmp_result = np.dot(matrix, src_point)
 
-		return tmp_result[0] / tmp_result[2], tmp_result[1] / tmp_result[2]
+		return [tmp_result[0] / tmp_result[2], tmp_result[1] / tmp_result[2]]
 
 if __name__ == "__main__":
 	import sys
@@ -52,13 +56,13 @@ if __name__ == "__main__":
 	import argparse
 
 	parser = argparse.ArgumentParser(description='Transform')
-	parser.add_argument('--img_source_path', type=str, default='/home/hdd/hdD_Git/FCOS/datasets/bullet/src/images')
-	parser.add_argument('--json_source_path', type=str, default='/home/hdd/hdD_Git/FCOS/datasets/bullet/src/json')
-	parser.add_argument('--ano_source_path', type=str, default='/home/hdd/hdD_Git/FCOS/datasets/bullet/src/xml')
-	parser.add_argument('--img_dest_path', type=str, default='/home/hdd/hdD_Git/FCOS/datasets/bullet/dest/images')
-	parser.add_argument('--json_dest_path', type=str, default='/home/hdd/hdD_Git/FCOS/datasets/bullet/dest/json')
-	parser.add_argument('--ano_dest_path', type=str, default='/home/hdd/hdD_Git/FCOS/datasets/bullet/dest/xml')
-	parser.add_argument('--start_name', type=int, default=0)
+	parser.add_argument('--img_source_path', type=str, default='/home/hdd/hdD_Git/data-augmentation/for_test/dest/img')
+	parser.add_argument('--json_source_path', type=str, default='/home/hdd/hdD_Git/data-augmentation/for_test/dest/json')
+	parser.add_argument('--ano_source_path', type=str, default='/home/hdd/hdD_Git/data-augmentation/for_test/dest/xml')
+	parser.add_argument('--img_dest_path', type=str, default='/home/hdd/hdD_Git/data-augmentation/for_test/tmp/img')
+	parser.add_argument('--json_dest_path', type=str, default='/home/hdd/hdD_Git/data-augmentation/for_test/tmp/json')
+	parser.add_argument('--ano_dest_path', type=str, default='/home/hdd/hdD_Git/data-augmentation/for_test/tmp/xml')
+	parser.add_argument('--start_name', type=int, default=336)
 
 	args = parser.parse_args()
 
@@ -71,7 +75,7 @@ if __name__ == "__main__":
 	dest_xml_path_root = args.ano_dest_path + '/' if args.ano_dest_path[-1] != '/' else args.ano_dest_path
 
 	img_list = glob.glob(img_path + "*.jpg")
-
+	start_name = args.start_name
 	for tmp_img in img_list:
 		name = utils.name(tmp_img)
 
@@ -79,18 +83,8 @@ if __name__ == "__main__":
 		ano_points = utils.load_json(src_json_path_root + name + ".json")
 		ano_box = utils.parse_xml(src_xml_path_root + name + ".xml")
 
-		height, width, _ = img.shape
-		src_point = [[0, height], [width, height], [100, 0], [width - 100, 0]]
-		dest_point = [[0, height + 100], [width + 100, height + 100], [0, 0], [width + 100, 0]]
-
-		matrix = Perspect.matrix(src_point, dest_point)
-		tmp_img = Perspect.transform_img(img, matrix, (int(width + 100), int(height + 100)))
-
-		print(ano_box)
-		tmp_ = [Perspect.transform_coord(tmp[:2], matrix) + Perspect.transform_coord(tmp[2:-1], matrix) for tmp in ano_box]
-		print(tmp_)
-		utils.show_pic(tmp_img, tmp_)
-
-		cv2.imshow('d', img)
-		cv2.imshow('t', tmp_img)
-		cv2.waitKey(0)
+		p_img, p_json, p_bbox = Perspect.perspect(img, ano_points, ano_box)
+		utils.save(start_name, p_img, p_json, p_bbox, dest_img_path_root, dest_json_path_root, dest_xml_path_root)
+		start_name += 1
+		
+		# utils.show_pic(p_img, p_bbox)

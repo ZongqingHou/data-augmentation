@@ -272,8 +272,8 @@ if __name__ == "__main__":
 		xml_ano = []
 
 		for tmp_coord in load_dict["shapes"]:
-			if tmp_coord["label"] == "boundary" or tmp_coord["label"] == "target":
-				continue
+			# if tmp_coord["label"] == "boundary" or tmp_coord["label"] == "target":
+			# 	continue
 
 			bbox = max_min(tmp_coord["points"])
 			bbox.append(tmp_coord["label"])
