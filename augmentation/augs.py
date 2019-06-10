@@ -23,12 +23,12 @@ class DataAugmentation:
 	# 调整亮度
 	def changeLight(img, point_chain, bboxes):
 		# random.seed(int(time.time()))
-		flag = random.uniform(0.5, 1) #flag>1为调暗,小于1为调亮
+		flag = random.uniform(0.56, 1) #flag>1为调暗,小于1为调亮
 		return exposure.adjust_gamma(img, flag), point_chain, bboxes
 
 	def darkness(img, point_chain, bboxes):
 		# random.seed(int(time.time()))
-		flag = random.uniform(1, 1.5) #flag>1为调暗,小于1为调亮
+		flag = random.uniform(1, 1.45) #flag>1为调暗,小于1为调亮
 		return exposure.adjust_gamma(img, flag), point_chain, bboxes
 
 	# 旋转
@@ -236,29 +236,29 @@ class DataAugmentation:
 		return flip_img, point_chain, flip_bboxes
 
 	def gaussian_noise(image, point_chain, bboxes):
-		variance = round(random.uniform(0.001,0.005),4)
+		variance = round(random.uniform(0.001,0.003),4)
 		image_noise = skimage.util.random_noise(image, mode='gaussian', seed=None, clip=True, var = variance)
 		return image_noise * 255, point_chain, bboxes
 
 	def gaussian_filter(image, point_chain, bboxes):
-		sigma = round(random.uniform(0.1,1),3)
+		sigma = round(random.uniform(0.1,0.9),3)
 		image_filter = filters.gaussian(image, sigma)
 		return image_filter * 255, point_chain, bboxes
 
 	def salt_noise(image, point_chain, bboxes):
-		variable = round(random.uniform(0.01,0.05),4)
+		variable = round(random.uniform(0.01,0.03),4)
 		image_noise = skimage.util.random_noise(image, mode='salt', seed=None, clip=True, amount=variable)
 
 		return image_noise * 255, point_chain, bboxes
 
 	def pepper_noise(image, point_chain, bboxes):
-		variable = round(random.uniform(0.005,0.01),4)
+		variable = round(random.uniform(0.005,0.009),4)
 		image_noise = skimage.util.random_noise(image, mode='pepper', seed=None, clip=True, amount=variable)
 
 		return image_noise * 255, point_chain, bboxes
 
 	def salt_pepper_noise(image, point_chain, bboxes):
-		variable = round(random.uniform(0.01,0.03),4)
+		variable = round(random.uniform(0.01,0.024),4)
 		image_noise = skimage.util.random_noise(image, mode='s&p', seed=None, clip=True, amount=variable)
 
 		return image_noise * 255, point_chain, bboxes
@@ -269,18 +269,18 @@ class DataAugmentation:
 		return image_noise * 255, point_chain, bboxes
 
 	def median_filter(image, point_chain, bboxes):
-		return cv2.medianBlur(image, 5), point_chain, bboxes
+		return cv2.medianBlur(image, 3), point_chain, bboxes
 
 	def mean_filter(image, point_chain, bboxes):
-		return cv2.blur(image, (5, 5)), point_chain, bboxes
+		return cv2.blur(image, (3, 3)), point_chain, bboxes
 	
 	def bilater_filter(image, point_chain, bboxes):
-		return cv2.bilateralFilter(image, 9, 75, 75), point_chain, bboxes
+		return cv2.bilateralFilter(image, 9, 66, 66), point_chain, bboxes
 
 	def enh_gamma(image, point_chain, bboxes):
 		'''lighter'''
 		image = img_as_float(image)
-		gam_factor = round(random.uniform(0.6,2),1)
+		gam_factor = round(random.uniform(0.6,1.6),1)
 		gam = exposure.adjust_gamma(image,gam_factor)
 		return gam * 255, point_chain, bboxes
 

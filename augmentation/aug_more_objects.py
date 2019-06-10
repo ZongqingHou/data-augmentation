@@ -1,3 +1,6 @@
+import sys
+sys.path.append("../")
+
 import utils
 
 def add_target(img, ano_points, ano_box):
@@ -24,21 +27,19 @@ def add_target(img, ano_points, ano_box):
 	return img, ano_points, ano_box
 
 if __name__ == "__main__":
-	import sys
-	sys.path.append("../")
-
+	import cv2
 	import glob
-	import utils
+	import copy
 	import argparse
 
 	parser = argparse.ArgumentParser(description='Transform')
-	parser.add_argument('--img_source_path', type=str, default='/home/hdd/hdD_Git/data-augmentation/for_test/dest/img')
-	parser.add_argument('--json_source_path', type=str, default='/home/hdd/hdD_Git/data-augmentation/for_test/dest/json')
-	parser.add_argument('--ano_source_path', type=str, default='/home/hdd/hdD_Git/data-augmentation/for_test/dest/xml')
-	parser.add_argument('--img_dest_path', type=str, default='/home/hdd/hdD_Git/data-augmentation/for_test/tmp/img')
-	parser.add_argument('--json_dest_path', type=str, default='/home/hdd/hdD_Git/data-augmentation/for_test/tmp/json')
-	parser.add_argument('--ano_dest_path', type=str, default='/home/hdd/hdD_Git/data-augmentation/for_test/tmp/xml')
-	parser.add_argument('--start_name', type=int, default=336)
+	parser.add_argument('--img_source_path', type=str, default='/home/extension/datasets/bullect_collection/backup/trainning/4/images')
+	parser.add_argument('--json_source_path', type=str, default='/home/extension/datasets/bullect_collection/backup/trainning/4/json')
+	parser.add_argument('--ano_source_path', type=str, default='/home/extension/datasets/bullect_collection/backup/trainning/4/xml')
+	parser.add_argument('--img_dest_path', type=str, default='/home/extension/datasets/bullect_collection/backup/trainning/2/images')
+	parser.add_argument('--json_dest_path', type=str, default='/home/extension/datasets/bullect_collection/backup/trainning/2/json')
+	parser.add_argument('--ano_dest_path', type=str, default='/home/extension/datasets/bullect_collection/backup/trainning/2/xml')
+	parser.add_argument('--start_name', type=int, default=29058)
 
 	args = parser.parse_args()
 
@@ -62,5 +63,5 @@ if __name__ == "__main__":
 													 copy.deepcopy(ano_box))					
 
 		img_more, points_more, box_more = add_target(img_more, points_more, box_more)
-		utils.save(start_index, img_more, points_more, box_more, dest_img_path_root, dest_json_path_root, dest_xml_path_root)
-		start_index += 1
+		utils.save(start_name, img_more, points_more, box_more, dest_img_path_root, dest_json_path_root, dest_xml_path_root)
+		start_name += 1

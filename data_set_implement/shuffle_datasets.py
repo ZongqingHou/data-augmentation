@@ -16,7 +16,7 @@ def shuffle_datasets(img_path, ano_path, dest_img_path, dest_ano_path):
         index_collections.remove(tmp_index)
 
 if __name__ == '__main__':
-    shuffle_datasets('/home/extension/datasets/bullect_collection/training/backup/img/*.jpg',
-                     '/home/extension/datasets/bullect_collection/training/backup/ano/',
-                     '/home/extension/datasets/bullect_collection/training/images/',
-                     '/home/extension/datasets/bullect_collection/training/ano/')
+    shuffle_datasets('/home/extension/datasets/bullect_collection/backup/trainning/2/images/*.jpg',
+                     '/home/extension/datasets/bullect_collection/backup/trainning/2/xml/',
+                     '/home/extension/datasets/bullect_collection/backup/trainning/3/images/',
+                     '/home/extension/datasets/bullect_collection/backup/trainning/3/xml/')

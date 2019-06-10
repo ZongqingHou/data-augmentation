@@ -19,6 +19,7 @@ def intersection(default_index, list_collections):
 
 
 def save(index, img, ano_points, ano_box, dest_img_path_root, dest_json_path_root, dest_xml_path_root, debug=''):
+	print(dest_img_path_root + debug + '%s.jpg' %index)
 	cv2.imwrite(dest_img_path_root + debug + '%s.jpg' %index, img)
 	with open(dest_img_path_root + debug + '%s.jpg' %index, 'rb') as buffer:
 		img_data = buffer.read()
@@ -157,7 +158,7 @@ def generate_xml(img_name,coords,img_size, output_path):
 	f.close()
 
 def load_json(path='./aug_config.json'):
-	with open(path, 'r') as file_buffer:
+	with open(path, 'r', encoding="unicode_escape") as file_buffer:
 		load_dict = json.load(file_buffer)
 
 	return load_dict
@@ -178,8 +179,8 @@ def max_min(points):
 	y_collections = []
 
 	for tmp_coord in points:
-		x_collections.append(tmp_coord[0])
-		y_collections.append(tmp_coord[1])
+		x_collections.append(int(tmp_coord[0]))
+		y_collections.append(int(tmp_coord[1]))
 
 	return [min(x_collections), min(y_collections), max(x_collections), max(y_collections)]
 
@@ -187,8 +188,8 @@ def random_offerset(max_min_coords, img_width, img_height):
 	width_flag = random.choice(offset_flag)
 	height_flag = random.choice(offset_flag)
 
-	width_offset = random.randint(1, img_width - max_min_coords[-2]) if width_flag else -random.randint(1, max_min_coords[0])
-	height_offset = random.randint(1, img_height - max_min_coords[-1]) if height_flag else -random.randint(1, max_min_coords[1])
+	width_offset = random.randint(0, img_width - max_min_coords[-2]) if width_flag else -random.randint(0, max_min_coords[0])
+	height_offset = random.randint(0, img_height - max_min_coords[-1]) if height_flag else -random.randint(0, max_min_coords[1])
 
 	return width_offset, height_offset
 
@@ -200,8 +201,11 @@ def point_offset(points, offset):
 	return points
 
 def copy_img(img, src, dest):
+	print(src)
+	print(dest)
+	print(img.shape)
 	for index, tmp_coord in enumerate(src):
-		img[dest[1]:dest[3], dest[0]:dest[2]] = img[src[1]:src[3], src[0]:src[2]]
+		img[dest[1]:dest[3], dest[0]:dest[2], ] = img[src[1]:src[1] + dest[3] - dest[1], src[0]:src[0] + dest[2] - dest[0], ]
 		# img[dest[index][1]][dest[index][0]] = img[tmp_coord[1]][tmp_coord[0]]
 
 def mat_product(matrix, points):
@@ -238,32 +242,32 @@ def augmentation(start_index, module, function_name, img, points, box, thread_mo
 	return start_index, img, points, box
 
 def show_pic(img, bboxes=None):
-    for i in range(len(bboxes)):
-        bbox = bboxes[i]
-        x_min = bbox[0]
-        y_min = bbox[1]
-        x_max = bbox[2]
-        y_max = bbox[3]
-        cv2.rectangle(img,(int(x_min),int(y_min)),(int(x_max),int(y_max)),(0,255,0),3) 
+	for i in range(len(bboxes)):
+		bbox = bboxes[i]
+		x_min = bbox[0]
+		y_min = bbox[1]
+		x_max = bbox[2]
+		y_max = bbox[3]
+		cv2.rectangle(img,(int(x_min),int(y_min)),(int(x_max),int(y_max)),(0,255,0),3) 
 		
-    cv2.namedWindow('pic', 0)  # 1表示原图
-    cv2.moveWindow('pic', 0, 0)
-    cv2.resizeWindow('pic', 1200,800)  # 可视化的图片大小
-    cv2.imshow('pic', img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows() 
+	cv2.namedWindow('pic', 0)  # 1表示原图
+	cv2.moveWindow('pic', 0, 0)
+	cv2.resizeWindow('pic', 1200,800)  # 可视化的图片大小
+	cv2.imshow('pic', img)
+	cv2.waitKey(0)
+	cv2.destroyAllWindows() 
 
 if __name__ == "__main__":
 	import io
 	from PIL import Image
-	dest = "/home/hdd/git/data-augmentation/test_data/dest/pairs/"
-	json_root = "/home/hdd/git/data-augmentation/test_data/src/json/*.json"
+	dest = "/home/extension/datasets/bullect_collection/backup/trainning/4/pairs/"
+	json_root = "/home/extension/datasets/bullect_collection/backup/trainning/4/json/*.json"
 	json_files = glob.glob(json_root)
 
 	index_name = 0
 
 	for tmp_json in json_files:
-		with open(tmp_json, 'r') as file_buffer:
+		with open(tmp_json, 'r', encoding="unicode_escape") as file_buffer:
 			load_dict = json.load(file_buffer)
 
 		image_buffer = io.BytesIO(base64.b64decode(load_dict["imageData"]))
@@ -283,6 +287,6 @@ if __name__ == "__main__":
 
 		img_size = [image.size[1], image.size[0], 3]
 
-		generate_xml(str(index_name), xml_ano, img_size, dest + "ano/%s.xml" %index_name)
+		generate_xml(str(index_name), xml_ano, img_size, dest + "xml/%s.xml" %index_name)
 
 		index_name += 1

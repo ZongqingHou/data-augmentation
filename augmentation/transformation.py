@@ -45,7 +45,7 @@ class Perspect:
 		src_point = np.array(point + [1])
 		tmp_result = np.dot(matrix, src_point)
 
-		return [tmp_result[0] / tmp_result[2], tmp_result[1] / tmp_result[2]]
+		return [max(0, tmp_result[0] / tmp_result[2]), max(0, tmp_result[1] / tmp_result[2])]
 
 if __name__ == "__main__":
 	import sys
@@ -56,13 +56,13 @@ if __name__ == "__main__":
 	import argparse
 
 	parser = argparse.ArgumentParser(description='Transform')
-	parser.add_argument('--img_source_path', type=str, default='/home/hdd/hdD_Git/data-augmentation/for_test/dest/img')
-	parser.add_argument('--json_source_path', type=str, default='/home/hdd/hdD_Git/data-augmentation/for_test/dest/json')
-	parser.add_argument('--ano_source_path', type=str, default='/home/hdd/hdD_Git/data-augmentation/for_test/dest/xml')
-	parser.add_argument('--img_dest_path', type=str, default='/home/hdd/hdD_Git/data-augmentation/for_test/tmp/img')
-	parser.add_argument('--json_dest_path', type=str, default='/home/hdd/hdD_Git/data-augmentation/for_test/tmp/json')
-	parser.add_argument('--ano_dest_path', type=str, default='/home/hdd/hdD_Git/data-augmentation/for_test/tmp/xml')
-	parser.add_argument('--start_name', type=int, default=336)
+	parser.add_argument('--img_source_path', type=str, default='/home/extension/datasets/bullect_collection/backup/total/images')
+	parser.add_argument('--json_source_path', type=str, default='/home/extension/datasets/bullect_collection/backup/total/json')
+	parser.add_argument('--ano_source_path', type=str, default='/home/extension/datasets/bullect_collection/backup/total/xml')
+	parser.add_argument('--img_dest_path', type=str, default='/home/extension/datasets/bullect_collection/backup/tmp/images')
+	parser.add_argument('--json_dest_path', type=str, default='/home/extension/datasets/bullect_collection/backup/tmp/json')
+	parser.add_argument('--ano_dest_path', type=str, default='/home/extension/datasets/bullect_collection/backup/tmp/xml')
+	parser.add_argument('--start_name', type=int, default=0)
 
 	args = parser.parse_args()
 
