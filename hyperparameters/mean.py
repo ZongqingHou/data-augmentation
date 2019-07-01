@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 
 def calculate_mean():
-	ims_path='/home/hdd/git/data-augmentation/test_data/dest/pairs/images/'# 图像数据集的路径
+	ims_path='/home/extension/datasets/bullect_collection/backup/tmp/images/'# 图像数据集的路径
 	ims_list=os.listdir(ims_path)
 	R_means=[]
 	G_means=[]
@@ -36,16 +36,16 @@ def calculate_mean():
 def minus_mean():
 	import glob
 
-	tmp_files = glob.glob("/home/hdd/git/data-augmentation/test_data/dest/pairs/images/*.jpg")
+	tmp_files = glob.glob("/home/extension/datasets/bullect_collection/backup/trainning/4/pairs/images/*.jpg")
 
 	for tmp in tmp_files:
 		img = cv2.imread(tmp)
-		img[:,:,0] = img[:,:,0] - 129.15375920021316
-		img[:,:,1] = img[:,:,1] - 133.72480198712907
-		img[:,:,2] = img[:,:,2] - 118.98474714415525
+		img[:,:,0] = img[:,:,0] - 124.1202406126534
+		img[:,:,1] = img[:,:,1] - 127.84392627084473
+		img[:,:,2] = img[:,:,2] - 115.4632036397791
 
 		name = tmp.split('/')[-1].split('.')[0]
-		cv2.imwrite('/home/hdd/git/data-augmentation/test_data/dest/pairs/minus_mean/' + name + '.jpg', img)
+		cv2.imwrite('/home/extension/datasets/bullect_collection/backup/trainning/4/pairs/mean/' + name + '.jpg', img)
 
 if __name__ == "__main__":
 	# calculate_mean()

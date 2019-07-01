@@ -56,12 +56,12 @@ if __name__ == "__main__":
 	import argparse
 
 	parser = argparse.ArgumentParser(description='Transform')
-	parser.add_argument('--img_source_path', type=str, default='/home/extension/datasets/bullect_collection/backup/total/images')
-	parser.add_argument('--json_source_path', type=str, default='/home/extension/datasets/bullect_collection/backup/total/json')
-	parser.add_argument('--ano_source_path', type=str, default='/home/extension/datasets/bullect_collection/backup/total/xml')
-	parser.add_argument('--img_dest_path', type=str, default='/home/extension/datasets/bullect_collection/backup/tmp/images')
-	parser.add_argument('--json_dest_path', type=str, default='/home/extension/datasets/bullect_collection/backup/tmp/json')
-	parser.add_argument('--ano_dest_path', type=str, default='/home/extension/datasets/bullect_collection/backup/tmp/xml')
+	parser.add_argument('--img_source_path', type=str, default='/home/extension/datasets/bullect_collection/backup/tmp/images')
+	parser.add_argument('--json_source_path', type=str, default='/home/extension/datasets/bullect_collection/backup/tmp/json')
+	parser.add_argument('--ano_source_path', type=str, default='/home/extension/datasets/bullect_collection/backup/tmp/xml')
+	parser.add_argument('--img_dest_path', type=str, default='/home/extension/datasets/bullect_collection/backup/tmp/trans/images')
+	parser.add_argument('--json_dest_path', type=str, default='/home/extension/datasets/bullect_collection/backup/tmp/trans/json')
+	parser.add_argument('--ano_dest_path', type=str, default='/home/extension/datasets/bullect_collection/backup/tmp/trans/xml')
 	parser.add_argument('--start_name', type=int, default=0)
 
 	args = parser.parse_args()

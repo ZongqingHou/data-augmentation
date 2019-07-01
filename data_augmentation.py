@@ -87,12 +87,12 @@ class DataAugThread(threading.Thread):
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description='DataAug')
-	parser.add_argument('--img_source_path', type=str, default='/home/extension/datasets/bullect_collection/backup/tmp/images')
-	parser.add_argument('--json_source_path', type=str, default='/home/extension/datasets/bullect_collection/backup/tmp/json')
-	parser.add_argument('--ano_source_path', type=str, default='/home/extension/datasets/bullect_collection/backup/tmp/xml')
-	parser.add_argument('--img_dest_path', type=str, default='/home/extension/datasets/bullect_collection/backup/trainning/4/images')
-	parser.add_argument('--json_dest_path', type=str, default='/home/extension/datasets/bullect_collection/backup/trainning/4/json')
-	parser.add_argument('--ano_dest_path', type=str, default='/home/extension/datasets/bullect_collection/backup/trainning/4/xml')
+	parser.add_argument('--img_source_path', type=str, default='/home/extension/datasets/bullect_collection/backup/tmp/trans/images')
+	parser.add_argument('--json_source_path', type=str, default='/home/extension/datasets/bullect_collection/backup/tmp/trans/json')
+	parser.add_argument('--ano_source_path', type=str, default='/home/extension/datasets/bullect_collection/backup/tmp/trans/xml')
+	parser.add_argument('--img_dest_path', type=str, default='/home/extension/datasets/bullect_collection/backup/trainning/7/images')
+	parser.add_argument('--json_dest_path', type=str, default='/home/extension/datasets/bullect_collection/backup/trainning/7/json')
+	parser.add_argument('--ano_dest_path', type=str, default='/home/extension/datasets/bullect_collection/backup/trainning/7/xml')
 	parser.add_argument('--start_name', type=int, default=0)
 	parser.add_argument('--workers', type=int, default=4)
 	args = parser.parse_args()
@@ -117,7 +117,7 @@ if __name__ == "__main__":
 			tmp_thread = DataAugThread(img_list[tmp*tmp_len:], source_json_root_path, source_xml_root_path, img_root_path, json_root_path, aug_root_path)
 		else:
 			tmp_thread = DataAugThread(img_list[tmp*tmp_len:(tmp+1)*tmp_len], source_json_root_path, source_xml_root_path, img_root_path, json_root_path, aug_root_path)
-		
+
 		thread_pool.append(tmp_thread)
 	
 	for tmp_thread in thread_pool:

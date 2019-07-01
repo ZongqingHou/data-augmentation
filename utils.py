@@ -260,13 +260,18 @@ def show_pic(img, bboxes=None):
 if __name__ == "__main__":
 	import io
 	from PIL import Image
-	dest = "/home/extension/datasets/bullect_collection/backup/trainning/4/pairs/"
-	json_root = "/home/extension/datasets/bullect_collection/backup/trainning/4/json/*.json"
+	dest = "/home/extension/datasets/bullect_collection/backup/trainning/7/pairs/"
+	json_root = "/home/extension/datasets/bullect_collection/backup/trainning/7/json/*.json"
 	json_files = glob.glob(json_root)
 
+	# root_path = "/home/extension/datasets/bullect_collection/backup/tmp/json/"
 	index_name = 0
 
 	for tmp_json in json_files:
+		# tmp_name = tmp_json.split('/')[-1].split('.')[0]
+
+		# tmp_json = root_path + tmp_name + ".json"
+
 		with open(tmp_json, 'r', encoding="unicode_escape") as file_buffer:
 			load_dict = json.load(file_buffer)
 
