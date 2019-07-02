@@ -2,7 +2,7 @@ import json
 
 '''
 {
-	"image":[
+	"images":[
 		{
 			"file_name": "000000397133.jpg",
 		 	"height": 427,
@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
 	parse = argparse.ArgumentParser("coco style")
 	parse.add_argument("--src_path", type=str, default="/home/hdd/hdD_Git/data_augmentation/for_test/src/json")
-	parse.add_argument("--dest_path", type=str, default="./")
+	parse.add_argument("--dest_path", type=str, default="tt.json")
 
 	args = parse.parse_args()
 
@@ -55,7 +55,7 @@ if __name__ == "__main__":
 		with open(tmp_file, 'r', encoding="unicode_escape") as file_buffer:
 			load_dict = json.load(file_buffer)
 		
-		file_id = tmp_file.split("/")[-1].split(".")[0]
+		file_id = int(tmp_file.split("/")[-1].split(".")[0])
 
 		image_field = {
 			"file_name": "%s.jpg" %file_id,
@@ -64,10 +64,10 @@ if __name__ == "__main__":
 		 	"id": file_id
 		}
 
-		if "image" not in coco_style:
-			coco_style["image"] = [image_field]
+		if "images" not in coco_style:
+			coco_style["images"] = [image_field]
 		else:
-			coco_style["image"].append(image_field)
+			coco_style["images"].append(image_field)
 
 		for tmp_polygon in load_dict["shapes"]:
 			bbox = max_min(tmp_polygon["points"])
@@ -82,7 +82,7 @@ if __name__ == "__main__":
 				"area": (bbox[2] - bbox[0]) * (bbox[3] - bbox[1]),
 				"iscrowd": 0,
 				"image_id": file_id,
-				"bbox":  bbox,
+				"bbox":  [bbox[0], bbox[1], bbox[2] - bbox[0], bbox[3] - bbox[1]],
 				"category_id": category_dict[tmp_polygon["label"]],
 				"id": index_count
 			}
@@ -94,5 +94,5 @@ if __name__ == "__main__":
 			else:
 				coco_style["annotations"].append(annotations)
 
-	with open("tt.json", 'w') as file_buffer:
+	with open(args.dest_path, 'w') as file_buffer:
 		json.dump(coco_style, file_buffer)
